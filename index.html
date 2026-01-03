@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physio Cube - Next Gen Recovery</title>
+    <link rel="icon" href="https://i.ibb.co/kgKXMwgq/round.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #0198ad;
+            --primary-dark: #007b8c;
+            --bg-color: #fefeff;
+            --text-main: #2c3e50;
+            --text-light: #555;
+            --card-bg: #ffffff;
+            --shadow: 0 10px 30px rgba(1, 152, 173, 0.15);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif; /* Более современный шрифт */
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            transition: direction 0.3s;
+        }
+
+        /* --- Анимации --- */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(1, 152, 173, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(1, 152, 173, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(1, 152, 173, 0); }
+        }
+
+        /* --- Фон с геометрией ("Кубы") --- */
+        .bg-shape {
+            position: absolute;
+            z-index: -1;
+            opacity: 0.1;
+        }
+        .cube-1 {
+            top: -50px; left: -50px;
+            width: 300px; height: 300px;
+            background: var(--primary);
+            border-radius: 40px;
+            transform: rotate(45deg);
+        }
+        .cube-2 {
+            bottom: 10%; right: -50px;
+            width: 200px; height: 200px;
+            border: 5px solid var(--primary);
+            border-radius: 30px;
+            transform: rotate(-15deg);
+        }
+
+        /* --- Header --- */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 8%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-img {
+            height: 50px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: 1px;
+        }
+
+        /* Стильный селектор языка */
+        .lang-wrapper select {
+            padding: 8px 12px;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            outline: none;
+            background: transparent;
+            transition: var(--transition);
+        }
+        .lang-wrapper select:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* --- Hero Section --- */
+        .hero {
+            padding: 100px 8% 60px;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            color: var(--primary);
+            animation: fadeInUp 0.8s ease 0.2s backwards;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            max-width: 700px;
+            margin: 0 auto 40px;
+            animation: fadeInUp 0.8s ease 0.4s backwards;
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.8s ease 0.6s backwards;
+        }
+
+        .btn {
+            padding: 16px 35px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 2px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, #00c6e0 100%);
+            color: white;
+            box-shadow: 0 5px 20px rgba(1, 152, 173, 0.4);
+            animation: pulse 2s infinite;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(1, 152, 173, 0.6);
+        }
+
+        .btn-outline {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: transparent;
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        /* --- Steps Section --- */
+        .steps {
+            padding: 80px 8%;
+            background: #f8fbfb;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.2rem;
+            margin-bottom: 60px;
+            color: var(--text-main);
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 30px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            border-bottom: 5px solid transparent;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow);
+            border-bottom: 5px solid var(--primary);
+        }
+
+        .card-num {
+            font-size: 3rem;
+            font-weight: 900;
+            color: rgba(1, 152, 173, 0.1);
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            transition: var(--transition);
+        }
+
+        .card:hover .card-num {
+            color: rgba(1, 152, 173, 0.2);
+            transform: scale(1.2);
+        }
+
+        .card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+            position: relative;
+            z-index: 2;
+        }
+
+        .card p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* --- Footer --- */
+        footer {
+            margin-top: auto;
+            background: #222;
+            color: #888;
+            padding: 40px 8%;
+            text-align: center;
+        }
+
+        .doctor-access {
+            display: inline-block;
+            margin-top: 15px;
+            font-size: 0.8rem;
+            color: #444;
+            text-decoration: none;
+            border: 1px solid #333;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: var(--transition);
+        }
+
+        .doctor-access:hover {
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        /* --- RTL Support --- */
+        /* При включении RTL (he, ar) меняем направление стрелок и текста */
+        body[dir="rtl"] {
+            text-align: right;
+        }
+        body[dir="rtl"] .hero { text-align: center; }
+        body[dir="rtl"] .card-num { right: auto; left: 20px; }
+        body[dir="rtl"] .lang-wrapper select { text-align: right; direction: rtl; }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.2rem; }
+            .btn { width: 100%; justify-content: center; }
+        }
+    </style>
+</head>
+<body dir="ltr"> <div class="bg-shape cube-1"></div>
+    <div class="bg-shape cube-2"></div>
+
+    <header>
+        <div class="logo-container">
+            <img src="https://i.pinimg.com/736x/b1/21/13/b12113174c4e7e5af8f77a203e67663d.jpg" alt="Physio Cube Logo" class="logo-img">
+            <span class="logo-text">Physio Cube</span>
+        </div>
+        <div class="lang-wrapper">
+            <select id="language-select" onchange="changeLanguage()">
+                <option value="en">English</option>
+                <option value="ru">Русский</option>
+                <option value="he">עברית</option>
+                <option value="pt">Português</option>
+                <option value="ar">العربية</option>
+            </select>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h1 data-i18n="hero_title">Your Health in a Cube</h1>
+        <p data-i18n="hero_desc">Professional physiotherapy without queues. Get diagnostics and a recovery plan directly at your gym.</p>
+        
+        <div class="btn-container">
+            <button class="btn btn-primary" onclick="redirectToWebCube()">
+                <span data-i18n="btn_webcube">Enter WebCube Online</span>
+                <span class="arrow">➜</span>
+            </button>
+            
+            <a href="path/to/app.apk" class="btn btn-outline" download>
+                <span>⬇</span>
+                <span data-i18n="btn_download">Download Android App</span>
+            </a>
+        </div>
+    </section>
+
+    <section class="steps">
+        <h2 class="section-title" data-i18n="steps_title">How Physio Cube Works</h2>
+        <div class="steps-grid">
+            <div class="card">
+                <div class="card-num">01</div>
+                <h3 data-i18n="step1_title">Visit</h3>
+                <p data-i18n="step1_desc">Come to your sports club equipped with Physio Cube hardware.</p>
+            </div>
+            <div class="card">
+                <div class="card-num">02</div>
+                <h3 data-i18n="step2_title">Survey</h3>
+                <p data-i18n="step2_desc">Take a quick survey about your pain type, sport, and injury details.</p>
+            </div>
+            <div class="card">
+                <div class="card-num">03</div>
+                <h3 data-i18n="step3_title">Tasks</h3>
+                <p data-i18n="step3_desc">Receive a personalized set of test exercises on your mobile phone.</p>
+            </div>
+            <div class="card">
+                <div class="card-num">04</div>
+                <h3 data-i18n="step4_title">Cube Scan</h3>
+                <p data-i18n="step4_desc">Perform exercises in the Cube while it scans your biomechanics.</p>
+            </div>
+            <div class="card">
+                <div class="card-num">05</div>
+                <h3 data-i18n="step5_title">Analysis</h3>
+                <p data-i18n="step5_desc">Data is analyzed and sent to a physiotherapist for an online solution.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Physio Cube. All rights reserved.</p>
+        <a href="doctor-login.html" class="doctor-access" data-i18n="doctor_login">Specialist Login</a>
+    </footer>
+
+    <script>
+        // База текстов для переводов
+        const translations = {
+            en: {
+                hero_title: "Your Health in a Cube",
+                hero_desc: "Professional physiotherapy without queues. Get diagnostics and a recovery plan directly at your gym.",
+                btn_webcube: "Enter WebCube Online",
+                btn_download: "Download Android App",
+                steps_title: "How Physio Cube Works",
+                step1_title: "Visit",
+                step1_desc: "Come to your sports club equipped with Physio Cube hardware.",
+                step2_title: "Survey",
+                step2_desc: "Take a quick survey about your pain type, sport, and injury details.",
+                step3_title: "Tasks",
+                step3_desc: "Receive a personalized set of test exercises on your mobile phone.",
+                step4_title: "Cube Scan",
+                step4_desc: "Perform exercises in the Cube while it scans your biomechanics.",
+                step5_title: "Analysis",
+                step5_desc: "Data is analyzed and sent to a physiotherapist for an online solution.",
+                doctor_login: "Specialist Login"
+            },
+            ru: {
+                hero_title: "Ваше здоровье в Кубе",
+                hero_desc: "Профессиональная физиотерапия без очередей. Пройдите диагностику и получите план восстановления прямо в зале.",
+                btn_webcube: "Войти онлайн WebCube",
+                btn_download: "Скачать для Android",
+                steps_title: "Как работает Physio Cube?",
+                step1_title: "Визит",
+                step1_desc: "Придите в спортивный клуб, где установлено наше оборудование.",
+                step2_title: "Опрос",
+                step2_desc: "Пройдите быстрый опрос о типе боли, виде спорта и характере травмы.",
+                step3_title: "Задания",
+                step3_desc: "Получите набор тестовых упражнений на свой мобильный телефон.",
+                step4_title: "Скан в Кубе",
+                step4_desc: "Выполняйте упражнения, пока Куб сканирует вашу биомеханику.",
+                step5_title: "Анализ",
+                step5_desc: "Данные отправляются врачу. Вы получаете решение онлайн.",
+                doctor_login: "Вход для специалистов"
+            },
+            he: {
+                hero_title: "הבריאות שלך בקוביה",
+                hero_desc: "פיזיותרפיה מקצועית ללא תורים. קבל אבחון ותוכנית התאוששות ישירות בחדר הכושר.",
+                btn_webcube: "כניסה ל-WebCube",
+                btn_download: "הורדת אפליקציה לאנדרואיד",
+                steps_title: "איך Physio Cube עובד?",
+                step1_title: "ביקור",
+                step1_desc: "הגיעו למועדון הספורט שלכם המצויד בציוד Physio Cube.",
+                step2_title: "סקר",
+                step2_desc: "ענו על סקר מהיר לגבי סוג הכאב, ענף הספורט ופרטי הפציעה.",
+                step3_title: "משימות",
+                step3_desc: "קבל סט תרגילים מותאם אישית לטלפון הנייד שלך.",
+                step4_title: "סריקה בקוביה",
+                step4_desc: "בצע את התרגילים בקוביה בזמן שהיא סורקת את התנועה שלך.",
+                step5_title: "ניתוח",
+                step5_desc: "הנתונים נשלחים לפיזיותרפיסט לקבלת פתרון אונליין.",
+                doctor_login: "כניסה למטפלים"
+            },
+            pt: {
+                hero_title: "Sua Saúde em um Cubo",
+                hero_desc: "Fisioterapia profissional sem filas. Obtenha diagnósticos e um plano de recuperação diretamente na academia.",
+                btn_webcube: "Entrar no WebCube",
+                btn_download: "Baixar App Android",
+                steps_title: "Como funciona?",
+                step1_title: "Visita",
+                step1_desc: "Vá ao seu clube esportivo equipado com hardware Physio Cube.",
+                step2_title: "Pesquisa",
+                step2_desc: "Responda a uma pesquisa rápida sobre sua dor e lesão.",
+                step3_title: "Tarefas",
+                step3_desc: "Receba um conjunto personalizado de exercícios no celular.",
+                step4_title: "Scan no Cubo",
+                step4_desc: "Faça exercícios no Cubo enquanto ele escaneia sua biomecânica.",
+                step5_title: "Análise",
+                step5_desc: "Os dados são enviados a um fisioterapeuta para uma solução online.",
+                doctor_login: "Login de Especialista"
+            },
+            ar: {
+                hero_title: "صحتك في مكعب",
+                hero_desc: "العلاج الطبيعي المهني بدون طوابير. احصل على التشخيص وخطة التعافي مباشرة في صالة الألعاب الرياضية.",
+                btn_webcube: "دخول WebCube",
+                btn_download: "تحميل تطبيق أندرويد",
+                steps_title: "كيف يعمل Physio Cube؟",
+                step1_title: "زيارة",
+                step1_desc: "تعال إلى ناديك الرياضي المجهز بمعدات Physio Cube.",
+                step2_title: "استبيان",
+                step2_desc: "أجب عن استبيان سريع حول نوع الألم وتفاصيل الإصابة.",
+                step3_title: "المهام",
+                step3_desc: "احصل على مجموعة تمارين مخصصة على هاتفك المحمول.",
+                step4_title: "مسح المكعب",
+                step4_desc: "قم بأداء التمارين في المكعب بينما يقوم بمسح حركتك.",
+                step5_title: "تحليل",
+                step5_desc: "يتم إرسال البيانات إلى أخصائي العلاج الطبيعي للحصول على حل عبر الإنترنت.",
+                doctor_login: "دخول المتخصصين"
+            }
+        };
+
+        // Функция смены языка на лету
+        function changeLanguage() {
+            const langSelect = document.getElementById('language-select');
+            const lang = langSelect.value;
+            const elements = document.querySelectorAll('[data-i18n]');
+            
+            // Настройка направления текста (RTL/LTR)
+            if (lang === 'he' || lang === 'ar') {
+                document.body.setAttribute('dir', 'rtl');
+                document.querySelector('.arrow').innerText = "⬅"; // Разворачиваем стрелку
+            } else {
+                document.body.setAttribute('dir', 'ltr');
+                document.querySelector('.arrow').innerText = "➜";
+            }
+
+            // Подмена текста
+            elements.forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang] && translations[lang][key]) {
+                    // Добавляем плавное исчезновение/появление текста
+                    el.style.opacity = 0;
+                    setTimeout(() => {
+                        el.innerText = translations[lang][key];
+                        el.style.opacity = 1;
+                    }, 200);
+                }
+            });
+        }
+
+        // Логика кнопки перехода
+        function redirectToWebCube() {
+            const lang = document.getElementById('language-select').value;
+            let targetUrl = `${lang}/main.html`;
+            
+            console.log(`Redirecting to: ${targetUrl}`);
+            window.location.href = targetUrl;
+        }
+        
+        // Инициализация (на случай, если браузер запомнил выбор)
+        window.onload = changeLanguage;
+    </script>
+</body>
+</html>
